@@ -245,8 +245,8 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({
         body: {
-          client_id: 12345,
-          client_secret: 'secret',
+          app_id: 12345,
+          app_secret: 'secret',
           grant_type: 'password',
           password: 'bar',
           username: 'foo'
@@ -277,8 +277,8 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({
         body: {
-          client_id: 12345,
-          client_secret: 'secret',
+          app_id: 12345,
+          app_secret: 'secret',
           grant_type: 'password',
           password: 'bar',
           username: 'foo'
@@ -308,8 +308,8 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({
         body: {
-          client_id: 12345,
-          client_secret: 'secret',
+          app_id: 12345,
+          app_secret: 'secret',
           username: 'foo',
           password: 'bar',
           grant_type: 'password',
@@ -340,8 +340,8 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
       var request = new Request({
         body: {
-          client_id: 12345,
-          client_secret: 'secret',
+          app_id: 12345,
+          app_secret: 'secret',
           username: 'foo',
           password: 'bar',
           grant_type: 'password',
@@ -375,8 +375,8 @@ describe('TokenHandler integration', function() {
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, allowExtendedTokenAttributes: true });
       var request = new Request({
         body: {
-          client_id: 12345,
-          client_secret: 'secret',
+          app_id: 12345,
+          app_secret: 'secret',
           username: 'foo',
           password: 'bar',
           grant_type: 'password',
@@ -408,7 +408,7 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 'øå€£‰', client_secret: 'foo' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 'øå€£‰', app_secret: 'foo' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.getClient(request);
@@ -416,7 +416,7 @@ describe('TokenHandler integration', function() {
         should.fail();
       } catch (e) {
         e.should.be.an.instanceOf(InvalidRequestError);
-        e.message.should.equal('Invalid parameter: `client_id`');
+        e.message.should.equal('Invalid parameter: `app_id`');
       }
     });
 
@@ -426,7 +426,7 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 'foo', client_secret: 'øå€£‰' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 'foo', app_secret: 'øå€£‰' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.getClient(request);
@@ -434,7 +434,7 @@ describe('TokenHandler integration', function() {
         should.fail();
       } catch (e) {
         e.should.be.an.instanceOf(InvalidRequestError);
-        e.message.should.equal('Invalid parameter: `client_secret`');
+        e.message.should.equal('Invalid parameter: `app_secret`');
       }
     });
 
@@ -444,7 +444,7 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 12345, app_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(should.fail)
@@ -460,7 +460,7 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 12345, app_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(should.fail)
@@ -476,7 +476,7 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 12345, app_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(should.fail)
@@ -518,7 +518,7 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 12345, app_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(function(data) {
@@ -544,7 +544,7 @@ describe('TokenHandler integration', function() {
             password: false
           }
        });
-        var request = new Request({ body: { client_id: 'blah', grant_type: 'password'}, headers: {}, method: {}, query: {} });
+        var request = new Request({ body: { app_id: 'blah', grant_type: 'password'}, headers: {}, method: {}, query: {} });
 
         return handler.getClient(request)
           .then(function(data) {
@@ -592,7 +592,7 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 12345, app_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
@@ -603,7 +603,7 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 12345, app_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
@@ -614,20 +614,20 @@ describe('TokenHandler integration', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 12345, app_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       handler.getClient(request).should.be.an.instanceOf(Promise);
     });
   });
 
   describe('getClientCredentials()', function() {
-    it('should throw an error if `client_id` is missing', function() {
+    it('should throw an error if `app_id` is missing', function() {
       var model = {
         getClient: function() {},
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_secret: 'foo' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_secret: 'foo' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.getClientCredentials(request);
@@ -639,13 +639,13 @@ describe('TokenHandler integration', function() {
       }
     });
 
-    it('should throw an error if `client_secret` is missing', function() {
+    it('should throw an error if `app_secret` is missing', function() {
       var model = {
         getClient: function() {},
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { client_id: 'foo' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 'foo' }, headers: {}, method: {}, query: {} });
 
       try {
         handler.getClientCredentials(request);
@@ -657,21 +657,21 @@ describe('TokenHandler integration', function() {
       }
     });
 
-    describe('with `client_id` and grant type is `password` and `requireClientAuthentication` is false', function() {
+    describe('with `app_id` and grant type is `password` and `requireClientAuthentication` is false', function() {
       it('should return a client', function() {
         var model = {
           getClient: function() {},
           saveToken: function() {}
         };
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120, requireClientAuthentication: { password: false} });
-        var request = new Request({ body: { client_id: 'foo', grant_type: 'password' }, headers: {}, method: {}, query: {} });
+        var request = new Request({ body: { app_id: 'foo', grant_type: 'password' }, headers: {}, method: {}, query: {} });
         var credentials = handler.getClientCredentials(request);
 
         credentials.should.eql({ clientId: 'foo' });
       });
     });
 
-    describe('with `client_id` and `client_secret` in the request header as basic auth', function() {
+    describe('with `app_id` and `app_secret` in the request header as basic auth', function() {
       it('should return a client', function() {
         var model = {
           getClient: function() {},
@@ -692,14 +692,14 @@ describe('TokenHandler integration', function() {
       });
     });
 
-    describe('with `client_id` and `client_secret` in the request body', function() {
+    describe('with `app_id` and `app_secret` in the request body', function() {
       it('should return a client', function() {
         var model = {
           getClient: function() {},
           saveToken: function() {}
         };
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-        var request = new Request({ body: { client_id: 'foo', client_secret: 'bar' }, headers: {}, method: {}, query: {} });
+        var request = new Request({ body: { app_id: 'foo', app_secret: 'bar' }, headers: {}, method: {}, query: {} });
         var credentials = handler.getClientCredentials(request);
 
         credentials.should.eql({ clientId: 'foo', clientSecret: 'bar' });
@@ -871,8 +871,8 @@ describe('TokenHandler integration', function() {
         var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
         var request = new Request({
           body: {
-            client_id: 12345,
-            client_secret: 'secret',
+            app_id: 12345,
+            app_secret: 'secret',
             grant_type: 'password',
             password: 'bar',
             username: 'foo',

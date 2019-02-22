@@ -35,7 +35,7 @@ describe('AuthorizeHandler', function() {
       });
       
       var request = new Request({
-        body: { client_id: '123', response_type: 'code' },
+        body: { app_id: '123', response_type: 'code' },
         headers: {},
         method: {},
         query: {}
@@ -58,7 +58,7 @@ describe('AuthorizeHandler', function() {
         saveAuthorizationCode: function() {}
       };
       var handler = new AuthorizeHandler({ authorizationCodeLifetime: 120, model: model });
-      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { app_id: 12345, app_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(function() {
