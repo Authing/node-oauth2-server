@@ -37,7 +37,7 @@ describe('TokenHandler', function() {
       
       var request = new Request({
         method: 'POST',
-        body: { 'grant_type': 'client_credentials', 'app_id': 'abc', 'app_secret': 'xyz' },
+        body: { 'grant_type': 'client_credentials', 'client_id': 'abc', 'client_secret': 'xyz' },
         headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' },
         query: {}
       });
@@ -58,7 +58,7 @@ describe('TokenHandler', function() {
         saveToken: function() {}
       };
       var handler = new TokenHandler({ accessTokenLifetime: 120, model: model, refreshTokenLifetime: 120 });
-      var request = new Request({ body: { app_id: 12345, app_secret: 'secret' }, headers: {}, method: {}, query: {} });
+      var request = new Request({ body: { client_id: 12345, client_secret: 'secret' }, headers: {}, method: {}, query: {} });
 
       return handler.getClient(request)
         .then(function() {

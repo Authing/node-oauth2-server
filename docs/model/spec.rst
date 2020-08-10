@@ -218,7 +218,7 @@ An ``Object`` representing the access token and associated data.
       .then(function(token) {
         return Promise.all([
           token,
-          db.queryClient({id: token.app_id}),
+          db.queryClient({id: token.client_id}),
           db.queryUser({id: token.user_id})
         ]);
       })
@@ -292,7 +292,7 @@ An ``Object`` representing the refresh token and associated data.
       .then(function(token) {
         return Promise.all([
           token,
-          db.queryClient({id: token.app_id}),
+          db.queryClient({id: token.client_id}),
           db.queryUser({id: token.user_id})
         ]);
       })
@@ -368,7 +368,7 @@ An ``Object`` representing the authorization code and associated data.
       .then(function(code) {
         return Promise.all([
           code,
-          db.queryClient({id: code.app_id}),
+          db.queryClient({id: code.client_id}),
           db.queryUser({id: code.user_id})
         ]);
       })
@@ -443,9 +443,9 @@ The return value (``client``) can carry additional properties that will be ignor
 
   function getClient(clientId, clientSecret) {
     // imaginary DB query
-    let params = {app_id: clientId};
+    let params = {client_id: clientId};
     if (clientSecret) {
-      params.app_secret = clientSecret;
+      params.client_secret = clientSecret;
     }
     db.queryClient(params)
       .then(function(client) {
@@ -623,14 +623,14 @@ If the ``allowExtendedTokenAttributes`` server option is enabled (see :ref:`OAut
         access_token: token.accessToken,
         expires_at: token.accessTokenExpiresAt,
         scope: token.scope,
-        app_id: client.id,
+        client_id: client.id,
         user_id: user.id
       }),
       db.saveRefreshToken({
         refresh_token: token.refreshToken,
         expires_at: token.refreshTokenExpiresAt,
         scope: token.scope,
-        app_id: client.id,
+        client_id: client.id,
         user_id: user.id
       })
     ];
@@ -642,7 +642,7 @@ If the ``allowExtendedTokenAttributes`` server option is enabled (see :ref:`OAut
           refreshToken: refreshToken.refresh_token,
           refreshTokenExpiresAt: refreshToken.expires_at,
           scope: accessToken.scope,
-          client: {id: accessToken.app_id},
+          client: {id: accessToken.client_id},
           user: {id: accessToken.user_id}
         };
       });
@@ -724,7 +724,7 @@ An ``Object`` representing the authorization code and associated data.
       expires_at: code.expiresAt,
       redirect_uri: code.redirectUri,
       scope: code.scope,
-      app_id: client.id,
+      client_id: client.id,
       user_id: user.id
     };
     return db.saveAuthorizationCode(authCode)
@@ -734,7 +734,7 @@ An ``Object`` representing the authorization code and associated data.
           expiresAt: authorizationCode.expires_at,
           redirectUri: authorizationCode.redirect_uri,
           scope: authorizationCode.scope,
-          client: {id: authorizationCode.app_id},
+          client: {id: authorizationCode.client_id},
           user: {id: authorizationCode.user_id}
         };
       });

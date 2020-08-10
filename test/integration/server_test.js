@@ -52,9 +52,9 @@ describe('Server integration', function() {
 
       return server.authenticate(request, response)
         .then(function() {
-          this.addAcceptedScopesHeader.should.be.true;
-          this.addAuthorizedScopesHeader.should.be.true;
-          this.allowBearerTokensInQueryString.should.be.false;
+          this.addAcceptedScopesHeader.should.be.true();
+          this.addAuthorizedScopesHeader.should.be.true();
+          this.allowBearerTokensInQueryString.should.be.false();
         })
         .catch(should.fail);
     });
@@ -110,12 +110,12 @@ describe('Server integration', function() {
         }
       };
       var server = new Server({ model: model });
-      var request = new Request({ body: { app_id: 1234, app_secret: 'secret', response_type: 'code' }, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: { state: 'foobar' } });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', response_type: 'code' }, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: { state: 'foobar' } });
       var response = new Response({ body: {}, headers: {} });
 
       return server.authorize(request, response)
         .then(function() {
-          this.allowEmptyState.should.be.false;
+          this.allowEmptyState.should.be.false();
         })
         .catch(should.fail);
     });
@@ -136,7 +136,7 @@ describe('Server integration', function() {
         }
       };
       var server = new Server({ model: model });
-      var request = new Request({ body: { app_id: 1234, app_secret: 'secret', response_type: 'code' }, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: { state: 'foobar' } });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', response_type: 'code' }, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: { state: 'foobar' } });
       var response = new Response({ body: {}, headers: {} });
       var handler = server.authorize(request, response);
 
@@ -159,7 +159,7 @@ describe('Server integration', function() {
         }
       };
       var server = new Server({ model: model });
-      var request = new Request({ body: { app_id: 1234, app_secret: 'secret', response_type: 'code' }, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: { state: 'foobar' } });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', response_type: 'code' }, headers: { 'Authorization': 'Bearer foo' }, method: {}, query: { state: 'foobar' } });
       var response = new Response({ body: {}, headers: {} });
 
       server.authorize(request, response, null, next);
@@ -181,7 +181,7 @@ describe('Server integration', function() {
         validateScope: function() { return 'foo'; }
       };
       var server = new Server({ model: model });
-      var request = new Request({ body: { app_id: 1234, app_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass', scope: 'foo' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass', scope: 'foo' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
       var response = new Response({ body: {}, headers: {} });
 
       return server.token(request, response)
@@ -205,7 +205,7 @@ describe('Server integration', function() {
         }
       };
       var server = new Server({ model: model });
-      var request = new Request({ body: { app_id: 1234, app_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
       var response = new Response({ body: {}, headers: {} });
       var handler = server.token(request, response);
 
@@ -224,14 +224,72 @@ describe('Server integration', function() {
           return { accessToken: 1234, client: {}, user: {} };
         },
         validateScope: function() {
-            return 'foo';
+          return 'foo';
         }
       };
       var server = new Server({ model: model });
-      var request = new Request({ body: { app_id: 1234, app_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass', scope: 'foo' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', grant_type: 'password', username: 'foo', password: 'pass', scope: 'foo' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
       var response = new Response({ body: {}, headers: {} });
 
       server.token(request, response, null, next);
+    });
+  });
+
+  describe('revoke()', function() {
+
+    it('should return a promise', function() {
+      var model = {
+        getClient: function() {
+          return { id: 1234, grants: ['password'] };
+        },
+        getRefreshToken: function() {
+          return {
+            client: {
+              id: 1234
+            },
+            user: {}
+          };
+        },
+        getAccessToken: function() {
+          return null;
+        },
+        revokeToken: function() {
+          return true;
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', token: 'hash', token_type_hint: 'refresh_token' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var response = new Response({ body: {}, headers: {} });
+      var handler = server.revoke(request, response);
+
+      handler.should.be.an.instanceOf(Promise);
+    });
+
+    it('should support callbacks', function(next) {
+      var model = {
+        getClient: function() {
+          return { id: 1234, grants: ['password'] };
+        },
+        getRefreshToken: function() {
+          return {
+            client: {
+              id: 1234
+            },
+            user: {}
+          };
+        },
+        getAccessToken: function() {
+          return null;
+        },
+        revokeToken: function() {
+          return true;
+        }
+      };
+      var server = new Server({ model: model });
+      var request = new Request({ body: { client_id: 1234, client_secret: 'secret', token: 'hash', token_type_hint: 'refresh_token' }, headers: { 'content-type': 'application/x-www-form-urlencoded', 'transfer-encoding': 'chunked' }, method: 'POST', query: {} });
+      var response = new Response({ body: {}, headers: {} });
+
+      server.revoke(request, response, null, next);
     });
   });
 });
